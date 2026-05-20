@@ -11,11 +11,6 @@ touch storage/logs/laravel.log
 chown -R www-data:www-data storage bootstrap/cache
 chmod -R 775 storage bootstrap/cache
 
-composer install --no-interaction --prefer-dist
-
-npm install
-npm run build
-
 php artisan optimize:clear || true
 php artisan config:clear || true
 php artisan cache:clear || true

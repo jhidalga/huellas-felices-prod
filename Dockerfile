@@ -1,4 +1,4 @@
-FROM php:8.3-apache-bookworm
+FROM php:8.3-cli-bookworm
 
 RUN apt-get update && apt-get install -y \
     git \
@@ -23,30 +23,16 @@ WORKDIR /var/www/html
 COPY . .
 
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader
-
 RUN npm install
 RUN npm run build
 
 RUN chown -R www-data:www-data storage bootstrap/cache
 
-COPY docker/apache.conf /etc/apache2/sites-available/000-default.conf
-
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
-
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
-RUN rm -f /etc/apache2/mods-enabled/mpm_event.load \
-    && rm -f /etc/apache2/mods-enabled/mpm_event.conf \
-    && rm -f /etc/apache2/mods-enabled/mpm_worker.load \
-    && rm -f /etc/apache2/mods-enabled/mpm_worker.conf \
-    && rm -f /etc/apache2/mods-enabled/mpm_prefork.load \
-    && rm -f /etc/apache2/mods-enabled/mpm_prefork.conf \
-    && ln -s /etc/apache2/mods-available/mpm_prefork.load /etc/apache2/mods-enabled/mpm_prefork.load \
-    && ln -s /etc/apache2/mods-available/mpm_prefork.conf /etc/apache2/mods-enabled/mpm_prefork.conf \
-    && a2enmod rewrite
-
-EXPOSE 80
+EXPOSE 8080
 
 ENTRYPOINT ["entrypoint.sh"]
 
-CMD ["apache2-foreground"]
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8080"]
