@@ -31,6 +31,9 @@ RUN chown -R www-data:www-data storage bootstrap/cache
 
 RUN a2dismod mpm_event || true \
     && a2dismod mpm_worker || true \
+    && a2dismod mpm_prefork || true \
+    && rm -f /etc/apache2/mods-enabled/mpm_*.load \
+    && rm -f /etc/apache2/mods-enabled/mpm_*.conf \
     && a2enmod mpm_prefork \
     && a2enmod rewrite
 
