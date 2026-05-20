@@ -20,6 +20,6 @@ php artisan optimize:clear || true
 php artisan config:clear || true
 php artisan cache:clear || true
 
-php artisan storage:link || true
+php artisan storage:link --force || true
 
 exec "$@"
