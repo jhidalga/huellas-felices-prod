@@ -16,9 +16,9 @@ composer install --no-interaction --prefer-dist
 npm install
 npm run build
 
-php artisan optimize:clear
-php artisan config:clear
-php artisan cache:clear
+php artisan optimize:clear || true
+php artisan config:clear || true
+php artisan cache:clear || true
 
 php artisan storage:link || true
 
